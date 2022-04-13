@@ -50,6 +50,8 @@ def map_spores(growing_table, spore_table, spore_length, spore_width, max_radius
     for i in range(spore_length):
         for j in range(spore_width):
             growing_table[i+max_radius,j+max_radius] = spore_table[i,j]
+    print(growing_table.shape)
+    print(spore_table.shape)
     return growing_table
 
 def grow_mushrooms(growing_table, max_radius):
@@ -65,8 +67,8 @@ def grow_mushrooms(growing_table, max_radius):
 
 def generate_data(max_radius, max_mushrooms, length, width, n_samples):
     bank = []
-    spore_length = length - max_radius
-    spore_width = width - max_radius
+    spore_length = length - 2*max_radius
+    spore_width = width - 2*max_radius
 
     for i in range(n_samples):
         spore_table = np.zeros((spore_length, spore_width))
@@ -85,5 +87,5 @@ def generate_data(max_radius, max_mushrooms, length, width, n_samples):
     with open('mushrooms.pkl', 'wb') as f:
         pickle.dump(bank, f)
 
-generate_data(10, 5, 100, 100,5)
+generate_data(14, 8, 200, 100,10)
 
