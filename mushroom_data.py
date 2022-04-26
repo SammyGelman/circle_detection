@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import pickle
+import imageio
 
 def spore_mushrooms(spore_table, n_spores, max_radius):
     length = len(spore_table)
@@ -50,9 +51,15 @@ def map_spores(growing_table, spore_table, spore_length, spore_width, max_radius
     for i in range(spore_length):
         for j in range(spore_width):
             growing_table[i+max_radius,j+max_radius] = spore_table[i,j]
-    print(growing_table.shape)
-    print(spore_table.shape)
     return growing_table
+
+def gen_info_dat(x_coor, y_coor, radius):
+    # open the output file for writing. This will delete all existing data for
+    # that address
+    with open('input.txt', 'w') as f:
+        # loop over all filenames
+        for filename in os.listdir('negatives'):
+            f.write('negatives/' + filename + '\n')
 
 def grow_mushrooms(growing_table, max_radius):
     length = len(growing_table)
@@ -65,11 +72,11 @@ def grow_mushrooms(growing_table, max_radius):
                 cv2.circle(output,(i,j),r,1,-1)
     return output
 
-def generate_data(max_radius, max_mushrooms, length, width, n_samples):
+def generate_data(max_radius, max_mushrooms, length, width, n_samples, record_info):
     bank = []
     spore_length = length - 2*max_radius
     spore_width = width - 2*max_radius
-
+    
     for i in range(n_samples):
         spore_table = np.zeros((spore_length, spore_width))
         growing_table = np.zeros((length,width))
@@ -77,15 +84,24 @@ def generate_data(max_radius, max_mushrooms, length, width, n_samples):
         spore_mushrooms(spore_table, n_spores, max_radius)
 
         map_spores(growing_table,
-                   spore_table,
-                   spore_length,
-                   spore_width,
-                   max_radius)
+                spore_table,
+                spore_length,
+                spore_width,
+                max_radius)
+        
+        sample = grow_mushrooms(growing_table, max_radius)
 
-        bank.append(grow_mushrooms(growing_table, max_radius))
+        #normalize sample and convert to unit8
+        sample_n = cv2.normalize(src=sample, 
+                                dst=None, 
+                                alpha=0, 
+                                beta=255, 
+                                norm_type=cv2.NORM_MINMAX, 
+                                dtype=cv2.CV_8U)
 
-    with open('mushrooms.pkl', 'wb') as f:
-        pickle.dump(bank, f)
+        #save array to jpeg image in correct folder
+        imageio.imwrite('positives/positive_'+str(i)+'.jpeg', sample_n)
+        
 
-generate_data(14, 8, 200, 100,10)
+generate_data(14, 8, 200, 200, 250)
 
