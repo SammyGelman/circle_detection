@@ -53,26 +53,29 @@ def map_spores(growing_table, spore_table, spore_length, spore_width, max_radius
             growing_table[i+max_radius,j+max_radius] = spore_table[i,j]
     return growing_table
 
-def gen_info_dat(x_coor, y_coor, radius):
-    # open the output file for writing. This will delete all existing data for
-    # that address
-    with open('input.txt', 'w') as f:
-        # loop over all filenames
-        for filename in os.listdir('negatives'):
-            f.write('negatives/' + filename + '\n')
-
-def grow_mushrooms(growing_table, max_radius):
+def grow_mushrooms(growing_table, max_radius, n_spores):
     length = len(growing_table)
     width = len(growing_table[0])
     output = np.zeros((length, width))
+    coor = [n_spores]
     for i in range(length):
         for j in range(width):
             if growing_table[i,j] == 1:
                 r = round(np.random.random()*(max_radius - 1) + 1)
                 cv2.circle(output,(i,j),r,1,-1)
-    return output
+                
+                #append coordinate values
+                #x
+                coor.append(int(i-r))
+                #y
+                coor.append(int(j-r))
+                #w
+                coor.append(int(r*2+1))
+                #h
+                coor.append(int(r*2+1))
+    return output, coor
 
-def generate_data(max_radius, max_mushrooms, length, width, n_samples, record_info):
+def generate_data(max_radius, max_mushrooms, length, width, n_samples):
     bank = []
     spore_length = length - 2*max_radius
     spore_width = width - 2*max_radius
@@ -89,7 +92,7 @@ def generate_data(max_radius, max_mushrooms, length, width, n_samples, record_in
                 spore_width,
                 max_radius)
         
-        sample = grow_mushrooms(growing_table, max_radius)
+        sample, coor = grow_mushrooms(growing_table, max_radius, n_spores)
 
         #normalize sample and convert to unit8
         sample_n = cv2.normalize(src=sample, 
@@ -98,10 +101,30 @@ def generate_data(max_radius, max_mushrooms, length, width, n_samples, record_in
                                 beta=255, 
                                 norm_type=cv2.NORM_MINMAX, 
                                 dtype=cv2.CV_8U)
-
-        #save array to jpeg image in correct folder
-        imageio.imwrite('positives/positive_'+str(i)+'.jpeg', sample_n)
         
+        filename = 'positives/positive_'+str(i)+'.jpeg'
+        
+        #save array to jpeg image in correct folder
+        imageio.imwrite(filename, sample_n)
+        
+        #add file name to from of list
+        coor.insert(0, filename)
 
-generate_data(14, 8, 200, 200, 250)
+        #save coordinates to bank
+        bank.append(coor)
+
+    return bank
+
+def gen_pos_txt(bank):
+    # open the output file for writing. This will delete all existing data for
+    # that address
+    with open('pos.txt', 'w') as f:
+        for i in range(len(bank)):
+            for item in bank[i]:
+                f.write(str(item) + " ")
+            f.write("\n")
+
+
+bank = generate_data(14, 8, 200, 200, 250)
+gen_pos_txt(bank)
 
