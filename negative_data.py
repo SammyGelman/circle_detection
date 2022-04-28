@@ -84,7 +84,7 @@ def generate_data(max_length, max_mushrooms, length, width, n_samples):
                    spore_width,
                    max_length)
 
-        sample = grow_mushrooms(growing_table, max_radius)
+        sample = grow_mushrooms(growing_table, max_length)
         
         #normalize sample and convert to unit8
         sample_n = cv2.normalize(src=sample, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
@@ -98,5 +98,5 @@ def generate_data(max_length, max_mushrooms, length, width, n_samples):
     # with open('sticks.pkl', 'wb') as f:
     #     pickle.dump(bank, f)
     #
-generate_data(14, 8, 200, 200,10)
+generate_data(30, 8, 400, 400,10)
 

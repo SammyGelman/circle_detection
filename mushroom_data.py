@@ -125,6 +125,6 @@ def gen_pos_txt(bank):
             f.write("\n")
 
 
-bank = generate_data(14, 8, 200, 200, 250)
+bank = generate_data(30, 8, 400, 400, 10)
 gen_pos_txt(bank)
 
