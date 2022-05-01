@@ -6,7 +6,7 @@ num_mushrooms = []
 delta_mushrooms = 0
 
 for i, line in enumerate(test_file):
-    num_mushrooms.append(int(line))
+    num_mushrooms.append(int(line.replace(" ","")))
 
 for i in range(len(num_mushrooms)):
     img_dir = "tests/test_"+str(i)+".jpeg"

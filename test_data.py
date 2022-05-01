@@ -63,7 +63,7 @@ def grow_mushrooms(growing_table, max_radius, min_radius):
         for j in range(width):
             if growing_table[i,j] == 1:
                 rand_shape = np.random.random()
-                if rand_shape >= 0.5:
+                if rand_shape >= 0.25:
                     r = round(np.random.random()*(base - 1) + 1) + min_radius
                     num_mushrooms += 1
                     cv2.circle(output,(i,j),r,1,-1)
@@ -119,6 +119,6 @@ def gen_test_txt(bank):
             f.write("\n")
 
 
-bank = generate_data(40, 15, 12, 500, 500, 100)
+bank = generate_data(40, 15, 12, 500, 500, 1000)
 gen_test_txt(bank)
 
