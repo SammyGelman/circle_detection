@@ -98,5 +98,5 @@ def generate_data(max_length, max_mushrooms, length, width, n_samples):
     # with open('sticks.pkl', 'wb') as f:
     #     pickle.dump(bank, f)
     #
-generate_data(14, 8, 200, 200, 250)
+generate_data(30, 8, 400, 400, 10)
 

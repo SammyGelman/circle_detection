@@ -204,11 +204,114 @@ sh between the soft edges of circles was a known problem.
 \end_layout
 
 \begin_layout Subsection
-Huogh Circle detection
+Circle Huogh Transform
 \end_layout
 
 \begin_layout Standard
-This is actually a simpler algorithm that works by 
+The circle Huogh Transform is a feature extraction technice used for image
+ processing tasks.
+ 
+\end_layout
+
+\begin_layout Standard
+To explain the theory we start with a the mathematical description of the
+ circle in two-dimentional space using cartesian coordinates:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(x-a\right)^{2}+\left(y-b\right)^{2}=r^{2}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ represent the x and y coordinates to the center of the circle respecticvely.
+ 
+\end_layout
+
+\begin_layout Standard
+When the radius is fixed, this equation defines the outline of a circle.
+ In the event that our image data has circles which are filled in, the edges
+ an be extracted using the Canny edge detector.
+ 
+\end_layout
+
+\begin_layout Standard
+The Hugh transform works by scanning over all the x-y coordinates of the
+ edges in the input image and tracing out a cirlce in the parameter space.
+ When only a single radiius is being scanned for then the parameter space
+ is two dimensional, namely 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ of which we are mapping the output to is the given values for the center
+ of the circle given the edge points represented by x and y.
+ The output of each of these scans is recorded into an accumulator matrix
+ which is the same size and the space of interest.
+ 
+\end_layout
+
+\begin_layout Standard
+The maximum point in the accumulator matrix after all edges are scanned
+ will represent the center of the circles present in the input image.
+ 
+\end_layout
+
+\begin_layout Standard
+The the radius of the circle is unknown the, the parameter space inherits
+ another dimension.
+ 
+\end_layout
+
+\begin_layout Standard
+This algorithm has several downsides and rooms for optimization.
+ 
+\end_layout
+
+\begin_layout Standard
+For one, the parameter space that we are accumulating to is a discretized
+ representation of space.
+ So choosing the resolution of the accumulator is a tunable hyper-parameter.
+ 
+\end_layout
+
+\begin_layout Standard
+In addition, in real life examples, circles are not perfect, in this way
+ several circles of the same size can have differeing maxima in the accumulator
+ matrix after the algorithm has finished its scan.
+ for this reason a threshold parameter is necesarry to determine which candidate
+ circles are accepted.
+ 
+\end_layout
+
+\begin_layout Standard
+Deep neural networks have been shown to outpreform the Hough Transform and
+ are less susceptible to many of the potential misclassification inherint
+ in the method.
+ 
+\end_layout
+
+\begin_layout Standard
+Despite all of these potentail drawback the algortihm is both powerful,
+ simple and widely applied.
+ 
 \end_layout
 
 \begin_layout Part
