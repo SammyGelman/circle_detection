@@ -85,7 +85,11 @@ Samuel Gelman
 \end_layout
 
 \begin_layout Date
-3-5-2022
+25-4-2022
+\end_layout
+
+\begin_layout Address
+SammyGelman@gmail.com, github: sammygelman
 \end_layout
 
 \begin_layout Part*
@@ -93,53 +97,33 @@ Motivation
 \end_layout
 
 \begin_layout Standard
-Mushroom farming is different from traditional plant based agriculture in
+Mushroom farming is different then traditional plant based agriculture in
  many ways.
- Central of which is that a mushroom is the fruiting body of a fungal organism
- which lives its life underground.
- The organism is composed of a large mycellium network which metabolizes
- decaying organic matter and absorbs water from its growing medium.
-\end_layout
-
-\begin_layout Standard
-Additonally, fungi do not grow from seeds, rather they are spored from spores
- produced in the mushrooms which are microscopic size.
+ Central of which is the mushroom is actually the fruiting body of the fungal
+ organism which lives its live underground, composed of a large mycellium
+ network for the metabolization of decaying organic matter and the absorption
+ of water.
  
 \end_layout
 
 \begin_layout Standard
-This anatomy lends a large degree of unpredictability as to where a mushroom
+This anatomy causes a certain degree of unpredictability as to where a mushroom
  will sprout from within the growing medium.
  
 \end_layout
 
 \begin_layout Standard
-The classification of mushrooms via image data will allow the automated
- system to record their location and create a unique profile to track and
- monitor the specific mushroom until it is ready to be harvested and shipped.
+The classification of mushrooms will allow the automated system to record
+ their location and create a unique profile to track and monitor the specific
+ mushroom until it is ready to be harvested and shipped.
  
 \end_layout
 
 \begin_layout Standard
 The first step is therefore the classification and identification of the
  mushroom.
- This will be done by processing image data gathered from the grow house.
+ This will be done by processing image data.
  
-\end_layout
-
-\begin_layout Standard
-Mushrooms also come in many shapes and sizes.
- some with one cap and some with many.
- Mushroom caps can be light, dark or brightly colored.
- 
-\end_layout
-
-\begin_layout Standard
-Mushrooms can also grow in very dense clusters.
-\end_layout
-
-\begin_layout Standard
-This makes the task a generalized algorithm a difficult task.
 \end_layout
 
 \begin_layout Standard
@@ -152,14 +136,7 @@ For this preliminary work, simple types of mushrooms will be attempted for
 \begin_layout Standard
 This sharp contrast to the dark color of the growing medium will create
  strong gradients in the pixelated data which greatly reduces the difficulty
- of the classification task.
- 
-\end_layout
-
-\begin_layout Standard
-Before actual mushroom image data will be tested, algorithms will be tested
- on simple computer generated sample data.
- This data will be binary and two dimensional.
+ of the classification test.
  
 \end_layout
 
@@ -180,12 +157,12 @@ As mentioned above, the mushrooms being used are simple white, semi-spherical
 \end_layout
 
 \begin_layout Standard
-A script was written to generate samples of this nature.
+A script was written to do just that.
  Parameters for the size of the samples, the max/min circle radius and the
  max/min amount of circles to be generated can be entered in the script.
- The script also outputs text files giving the relative paths to the saved
- jpeg images as well as the coordinates for bounding rectangles surrounding
- each of the circles of interest.
+ The script also outputs text files giving the relative paths to the jpeg
+ images as well as the coordinates for bounding rectangles surrounding each
+ of the circles of interest.
  
 \end_layout
 
@@ -213,41 +190,23 @@ Haar Cascade
 \end_layout
 
 \begin_layout Standard
-The training algorithms used were sourced from the open source library for
- computer vision software, OpenCV.
- This is a machine learning algorithm which is given positive and negative
- image data and classifiers are trained through this supervised learning
- process.
- Positive images are images where the object we wish to train the algorithm
- to detect is present while negative images are any other image.
-\end_layout
+The training algorithms used are sourced from the open source library for
+ computer vision software OpenCV.
+ The first algorithm tried was the Haar Cascade classifier.
+ While this model worked well at identifying shapes, it failed to distinguish
+ between the circles and rectangles.
+ This led to an extremely high 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Standard
-The Haar cascade algorithm works by using an number of filters to scan an
- input image and generate corresponding feature maps.
+false alarm
+\begin_inset Quotes erd
+\end_inset
+
+ rate.
+ After further research, the inability for Haar cascade classifiers to distingui
+sh between the soft edges of circles was a known problem.
  
-\end_layout
-
-\begin_layout Standard
-At first, each individual feature extracted is known as a 
-\begin_inset Quotes eld
-\end_inset
-
-weak feature
-\begin_inset Quotes erd
-\end_inset
-
-.
- After many samples are run through the classifier cascade, these 
-\begin_inset Quotes eld
-\end_inset
-
-weak classifiers
-\begin_inset Quotes erd
-\end_inset
-
- are combined to create strong classifiers which lend a higher confidence
- rating towards classifying the object of interest.
 \end_layout
 
 \begin_layout Subsection
@@ -285,21 +244,14 @@ Where
 \begin_inset Formula $b$
 \end_inset
 
- represent the x and y coordinates to the center of the circle respectively
- and 
-\begin_inset Formula $r$
-\end_inset
-
- is the circles radius.
+ represent the x and y coordinates to the center of the circle respectively.
  
 \end_layout
 
 \begin_layout Standard
 When the radius is fixed, this equation defines the outline of a circle.
  In the event that our image data has circles which are filled in, the edges
- can be extracted using the Canny edge detector algorithm.
- This is a preliminary data preparation step built into the openCV implementatio
-n of the algorithm.
+ an be extracted using the Canny edge detector.
  
 \end_layout
 
@@ -310,10 +262,12 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Graphics
 	filename /home/sammy/mushrooms/saved_imgs/the-circular-Hough-transform.png
-	scale 50
-	rotateOrigin center
 
 \end_inset
 
@@ -353,36 +307,32 @@ The Hough transform works by scanning over all the x-y coordinates of the
 
  of which we are mapping the output to is the given values for the center
  of the circle given the edge points represented by x and y.
- This can be seen in Figure 1.
+ This can be seen in .
  The output of each of these scans is recorded into an accumulator matrix
- which is the same size as the sample image.
+ which is the same size and the space of interest.
  
 \end_layout
 
 \begin_layout Standard
-The maxima points in the accumulator matrix after all the edges have been
- scanned will represent the center of the circles present in the input image.
+The maximum point in the accumulator matrix after all edges are scanned
+ will represent the center of the circles present in the input image.
  
 \end_layout
 
 \begin_layout Standard
-If the radius of the circle is unknown the parameter space inherits another
- dimension or 
-\begin_inset Formula $r$
-\end_inset
-
-.
+The the radius of the circle is unknown the, the parameter space inherits
+ another dimension.
  
 \end_layout
 
 \begin_layout Standard
-This algorithm has several downsides and room for optimizations.
+This algorithm has several downsides and rooms for optimization.
  
 \end_layout
 
 \begin_layout Standard
-For one, the parameter space that we are accumulating to is a discrete represent
-ation of space.
+For one, the parameter space that we are accumulating to is a discretized
+ representation of space.
  So choosing the resolution of the accumulator is a tunable hyper-parameter.
  
 \end_layout
@@ -391,7 +341,7 @@ ation of space.
 In addition, in real life examples, circles are not perfect, in this way
  several circles of the same size can have differing maxima in the accumulator
  matrix after the algorithm has finished its scan.
- For this reason a threshold parameter is necessary to determine which candidate
+ for this reason a threshold parameter is necessary to determine which candidate
  circles are accepted.
  
 \end_layout
@@ -422,29 +372,14 @@ Haar Cascade
 \end_layout
 
 \begin_layout Standard
-The first algorithm tested was the Haar Cascade classifier.
- While this model worked well at identifying shapes, it failed to distinguish
- between the circles and rectangles.
- This led to an extremely high 
-\begin_inset Quotes eld
-\end_inset
-
-false alarm
-\begin_inset Quotes erd
-\end_inset
-
- rate.
- After further research, the inability for Haar cascade classifiers to distingui
-sh between the soft edges of circles and the edges of squares was a known
- problem.
- The Haar Cascade was implemented successfully from a data preparation stand
- point but the inability to detect the soft edges made the model unable
- to distinguish between the squares and circles.
+The Haar Cascade was implemented successfully from a data preparation stand
+ point - the inability to detect the soft edges made the model unable to
+ distinguish between the squares and circles.
  
 \end_layout
 
 \begin_layout Standard
-So while the algorithm managed to detect the correct number of objects it
+So while the algorithm manage to detect the correct number of objects it
  proved to be a poor choice for the purposes of this project.
  
 \end_layout
@@ -454,16 +389,16 @@ Circle Hough Transform
 \end_layout
 
 \begin_layout Standard
-While needing some tinkering with respect to the parameters, the Hough Transform
- proved to be very effective while remaining relatively easy to implement.
+While needing some tinkering with the parameters, the Hough Transform proved
+ to be very effective and while remaining relatively easy to implement.
 \end_layout
 
 \begin_layout Standard
-Some optimization was needed, but a final accuracy of ~99.583 percent was
+While some optimization was needed, a final accuracy of ~99.583 percent was
  reach.
  This value was determined by generating 1000 samples of size 500x500.
- Anywhere from one to twelve shapes were generated onto the images with
- a 75% chance of it being a circle and a 25% chance of it being a rectangle.
+ Anywhere one to twelve shapes were generated onto the image with a 75%
+ chance of it being a circle and a 25% chance of it being a rectangle.
  The maximum radius or length/width of the shapes were 40 pixels while the
  minimum was 15 pixels.
 \end_layout
@@ -473,7 +408,7 @@ The algorithm counted the number of circles found and compared this to the
  number of circles present.
  For each sample the absolute value of the difference was collected and
  summed.
- At the end, the amount of missed circles and false negatives were compared
+ At the end the amount of missed circles and false negatives were compared
  to the total number of circles accurately identified.
  
 \end_layout
@@ -512,9 +447,10 @@ Image sample before and after Hough transform.
 \end_layout
 
 \begin_layout Standard
-This metric does have a pitfall in that samples where there is both a false
+This method does have a pitfall in that samples where there is both a false
  positive and a missed circle get recorded as having no errors.
- This phenomena was observed when scanning through the data but it was rare.
+ This phenomena was observed when scanning through the data was encountered
+ but was rare.
  For a production grade algorithm a more rigorous score would be formulated,
  but to present a rough sketch of the capabilities of this algorithm this
  metric felt sufficient.
@@ -561,10 +497,6 @@ Thank you for taking the time to read this report.
 \begin_layout Standard
 All code written is available on my github upon request.
  
-\end_layout
-
-\begin_layout Right Address
-*SammyGelman@gmail.com, github: sammygelman
 \end_layout
 
 \end_body
