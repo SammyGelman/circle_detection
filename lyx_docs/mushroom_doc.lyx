@@ -107,13 +107,13 @@ Mushroom farming is different then traditional plant based agriculture in
 \end_layout
 
 \begin_layout Standard
-This anatomy causes a certain degree of unperdictability as to where a mushroom
+This anatomy causes a certain degree of unpredictability as to where a mushroom
  will sprout from within the growing medium.
  
 \end_layout
 
 \begin_layout Standard
-The classification of mushrooms will allow the atomated sytem to record
+The classification of mushrooms will allow the automated system to record
  their location and create a unique profile to track and monitor the specific
  mushroom until it is ready to be harvested and shipped.
  
@@ -127,8 +127,8 @@ The first step is therefore the classification and identification of the
 \end_layout
 
 \begin_layout Standard
-For this preleminary work, simple types of mushrooms will be attempted for
- varification, namely, mushrooms in which there exist one, spherical body
+For this preliminary work, simple types of mushrooms will be attempted for
+ verification, namely, mushrooms in which there exist one, spherical body
  which is close to white in color.
  
 \end_layout
@@ -151,7 +151,7 @@ Data Generation
 \begin_layout Standard
 As mentioned above, the mushrooms being used are simple white, semi-spherical
  bodies being grown on a dark surface.
- This data can be approximated by greating 2d image samples of white circles
+ This data can be approximated by creating 2d image samples of white circles
  on a black surface.
  
 \end_layout
@@ -162,21 +162,27 @@ A script was written to do just that.
  max/min amount of circles to be generated can be entered in the script.
  The script also outputs text files giving the relative paths to the jpeg
  images as well as the coordinates for bounding rectangles surrounding each
- of the cirlces of interest.
+ of the circles of interest.
  
 \end_layout
 
 \begin_layout Standard
 A similar script was used to generated randomly placed and sized rectangles
- to provide training data and ensure that the model could distinuish between
+ to provide training data and ensure that the model could distinguish between
  shapes.
- This will help from misclassifying objects or anomolies in the soil that
- are not mushrooms.
+ This will help from falsely classifying objects or anomalies in the soil
+ that are not mushrooms.
+ 
+\end_layout
+
+\begin_layout Standard
+Finally samples with a mixture of circles and squares were generated to
+ test the algorithm.
  
 \end_layout
 
 \begin_layout Section
-Training Models
+Models and Algorithms
 \end_layout
 
 \begin_layout Subsection
@@ -189,7 +195,7 @@ The training algorithms used are sourced from the open source library for
  The first algorithm tried was the Haar Cascade classifier.
  While this model worked well at identifying shapes, it failed to distinguish
  between the circles and rectangles.
- This led to an exteremly high 
+ This led to an extremely high 
 \begin_inset Quotes eld
 \end_inset
 
@@ -204,18 +210,18 @@ sh between the soft edges of circles was a known problem.
 \end_layout
 
 \begin_layout Subsection
-Circle Huogh Transform
+Circle Hough Transform
 \end_layout
 
 \begin_layout Standard
-The circle Huogh Transform is a feature extraction technice used for image
+The circle Hough Transform is a feature extraction technique used for image
  processing tasks.
  
 \end_layout
 
 \begin_layout Standard
 To explain the theory we start with a the mathematical description of the
- circle in two-dimentional space using cartesian coordinates:
+ circle in two-dimensional space using Cartesian coordinates:
 \end_layout
 
 \begin_layout Standard
@@ -238,7 +244,7 @@ Where
 \begin_inset Formula $b$
 \end_inset
 
- represent the x and y coordinates to the center of the circle respecticvely.
+ represent the x and y coordinates to the center of the circle respectively.
  
 \end_layout
 
@@ -250,9 +256,9 @@ When the radius is fixed, this equation defines the outline of a circle.
 \end_layout
 
 \begin_layout Standard
-The Hugh transform works by scanning over all the x-y coordinates of the
- edges in the input image and tracing out a cirlce in the parameter space.
- When only a single radiius is being scanned for then the parameter space
+The Hough transform works by scanning over all the x-y coordinates of the
+ edges in the input image and tracing out a circle in the parameter space.
+ When only a single radius is being scanned for then the parameter space
  is two dimensional, namely 
 \begin_inset Formula $a$
 \end_inset
@@ -294,28 +300,167 @@ For one, the parameter space that we are accumulating to is a discretized
 
 \begin_layout Standard
 In addition, in real life examples, circles are not perfect, in this way
- several circles of the same size can have differeing maxima in the accumulator
+ several circles of the same size can have differing maxima in the accumulator
  matrix after the algorithm has finished its scan.
- for this reason a threshold parameter is necesarry to determine which candidate
+ for this reason a threshold parameter is necessary to determine which candidate
  circles are accepted.
  
 \end_layout
 
 \begin_layout Standard
-Deep neural networks have been shown to outpreform the Hough Transform and
- are less susceptible to many of the potential misclassification inherint
+Deep neural networks have been shown to outperform the Hough Transform and
+ are less susceptible to many of the potential false classifications inherent
  in the method.
  
 \end_layout
 
 \begin_layout Standard
-Despite all of these potentail drawback the algortihm is both powerful,
+Despite all of these potential drawback the algorithm is both powerful,
  simple and widely applied.
  
 \end_layout
 
 \begin_layout Part
 Results
+\end_layout
+
+\begin_layout Section
+Analytical Review
+\end_layout
+
+\begin_layout Subsection
+Haar Cascade
+\end_layout
+
+\begin_layout Standard
+The Haar Cascade was implemented successfully from a data preparation stand
+ point - the inability to detect the soft edges made the model unable to
+ distinguish between the squares and circles.
+ 
+\end_layout
+
+\begin_layout Standard
+So while the algorithm manage to detect the correct number of objects it
+ proved to be a poor choice for the purposes of this project.
+ 
+\end_layout
+
+\begin_layout Subsection
+Circle Hough Transform
+\end_layout
+
+\begin_layout Standard
+While needing some tinkering with the parameters, the Hough Transform proved
+ to be very effective and while remaining relatively easy to implement.
+\end_layout
+
+\begin_layout Standard
+While some optimization was needed, a final accuracy of ~99.583 percent was
+ reach.
+ This value was determined by generating 1000 samples of size 500x500.
+ Anywhere one to twelve shapes were generated onto the image with a 75%
+ chance of it being a circle and a 25% chance of it being a rectangle.
+ The maximum radius or length/width of the shapes were 40 pixels while the
+ minimum was 15 pixels.
+\end_layout
+
+\begin_layout Standard
+The algorithm counted the number of circles found and compared this to the
+ number of circles present.
+ For each sample the absolute value of the difference was collected and
+ summed.
+ At the end the amount of missed circles and false negatives were compared
+ to the total number of circles accurately identified.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename classifier_example_img.png
+	scale 40
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Image sample before and after Hough transform.
+ Information of the circles is stored as a three dimensional coordinate
+ of (x_center, y_center, radius)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This method does have a pitfall in that samples where there is both a false
+ positive and a missed circle get recorded as having no errors.
+ This phenomena was observed when scanning through the data was encountered
+ but was rare.
+ For a production grade algorithm a more rigorous score would be formulated,
+ but to present a rough sketch of the capabilities of this algorithm this
+ metric felt sufficient.
+ 
+\end_layout
+
+\begin_layout Standard
+Another important parameter which was tuned is setting the max radius for
+ circles which the Hough transform can identify.
+ This was set to one fourth of the image size which was 125 pixels.
+ This is over triple the max radius of the mushroom.
+ By lowering this down to 80 pixels, twice the size, the accuracy was increased
+ to ~99.815.
+\end_layout
+
+\begin_layout Standard
+All other parameters of the algorithm were taken via online recommendations
+ and trial and error.
+ 
+\end_layout
+
+\begin_layout Part
+Conclusion
+\end_layout
+
+\begin_layout Standard
+With only reasonable effort and through utilizing open source technologies,
+ a frame work for data generation and circle classification was completed
+ with a fairly high confidence rating.
+ While better algorithms exist, the circle Hough transform worked fast and
+ well.
+ While real world image data is always more complicated to work with, it
+ seems more than plausible that the working implementation of the Hough
+ transform here could preform the task of finding mushrooms growing on a
+ 2d grow bed.
+ 
+\end_layout
+
+\begin_layout Standard
+Thank you for taking the time to read this report.
+ 
+\end_layout
+
+\begin_layout Standard
+All code written is available on my github upon request.
+ 
 \end_layout
 
 \end_body

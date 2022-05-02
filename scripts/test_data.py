@@ -102,7 +102,7 @@ def generate_data(max_radius, min_radius, max_mushrooms, length, width, n_sample
                                 norm_type=cv2.NORM_MINMAX, 
                                 dtype=cv2.CV_8U)
         
-        filename = 'tests/test_'+str(i)+'.jpeg'
+        filename = '../tests/test_'+str(i)+'.jpeg'
         
         #save array to jpeg image in correct folder
         imageio.imwrite(filename, sample_n)
@@ -112,7 +112,7 @@ def generate_data(max_radius, min_radius, max_mushrooms, length, width, n_sample
 def gen_test_txt(bank):
     # open the output file for writing. This will delete all existing data for
     # that address
-    with open('test.txt', 'w') as f:
+    with open('../ref_txt/test.txt', 'w') as f:
         for i in range(len(bank)):
             for item in bank[i]:
                 f.write(str(item) + " ")

@@ -13,10 +13,10 @@ import matplotlib.pyplot as plt
 # sample = args["sample"]
 # image = cv2.imread(args["image"])
 
-def hough_circles(img):
+def hough_circles(img, min_radius=10, max_radius=50, edge_param=250, acceptance_param=13.3, min_Dist=85):
     # load the image, clone it for output, and then convert it to grayscale
     image = cv2.imread(img)
-    max_radius = round(len(image[0])/4)
+    # max_radius = round(len(image[0])/4)
     output = image.copy()
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -24,9 +24,10 @@ def hough_circles(img):
     circles = cv2.HoughCircles(gray,
                                cv2.HOUGH_GRADIENT,
                                dp=0.5,
-                               minDist=85,
-                               param1=250,
-                               param2=13.3, 
+                               minDist=min_Dist,
+                               param1=edge_param,
+                               param2=acceptance_param, 
+                               minRadius=min_radius,
                                maxRadius=max_radius)
 
     # # edge display to check param1 value choice 
@@ -49,8 +50,8 @@ def hough_circles(img):
             cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
         
         # show the output image
-        # cv2.imshow("output", np.hstack([image, output]))
-        # cv2.waitKey(0)
+        cv2.imshow("output", np.hstack([image, output]))
+        cv2.waitKey(0)
     
         return len(circles[0])
     else:

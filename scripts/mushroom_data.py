@@ -102,7 +102,7 @@ def generate_data(max_radius, max_mushrooms, length, width, n_samples):
                                 norm_type=cv2.NORM_MINMAX, 
                                 dtype=cv2.CV_8U)
         
-        filename = 'positives/positive_'+str(i)+'.jpeg'
+        filename = '../positives/positive_'+str(i)+'.jpeg'
         
         #save array to jpeg image in correct folder
         imageio.imwrite(filename, sample_n)
@@ -118,7 +118,7 @@ def generate_data(max_radius, max_mushrooms, length, width, n_samples):
 def gen_pos_txt(bank):
     # open the output file for writing. This will delete all existing data for
     # that address
-    with open('pos.txt', 'w') as f:
+    with open('../ref_txt/pos.txt', 'w') as f:
         for i in range(len(bank)):
             for item in bank[i]:
                 f.write(str(item) + " ")
