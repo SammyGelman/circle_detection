@@ -76,7 +76,7 @@ def grow_mushrooms(growing_table, max_radius, min_radius):
 def generate_data(max_radius, min_radius, max_mushrooms, length, width, n_samples):
     spore_length = length - 2*max_radius
     spore_width = width - 2*max_radius
-   
+
     bank = []
     num_mushrooms = 0
 
@@ -91,19 +91,19 @@ def generate_data(max_radius, min_radius, max_mushrooms, length, width, n_sample
                 spore_length,
                 spore_width,
                 max_radius)
-        
+
         sample, num_mushrooms = grow_mushrooms(growing_table, max_radius, min_radius)
-        
+
         #normalize sample and convert to unit8
-        sample_n = cv2.normalize(src=sample, 
-                                dst=None, 
-                                alpha=0, 
-                                beta=255, 
-                                norm_type=cv2.NORM_MINMAX, 
+        sample_n = cv2.normalize(src=sample,
+                                dst=None,
+                                alpha=0,
+                                beta=255,
+                                norm_type=cv2.NORM_MINMAX,
                                 dtype=cv2.CV_8U)
-        
+
         filename = '../tests/test_'+str(i)+'.jpeg'
-        
+
         #save array to jpeg image in correct folder
         imageio.imwrite(filename, sample_n)
         bank.append(str(num_mushrooms))
@@ -119,6 +119,6 @@ def gen_test_txt(bank):
             f.write("\n")
 
 
-bank = generate_data(40, 15, 12, 500, 500, 1000)
+bank = generate_data(40, 15, 12, 500, 500, 200)
 gen_test_txt(bank)
 
